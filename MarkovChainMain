@@ -15,10 +15,6 @@ import MarkovChain as mc
 import networkx as nx
 import matplotlib.pyplot as plt
 
-
-
-
-
 #Create State Names Array using a dictionary
 
 state = {
