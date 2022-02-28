@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Feb 28 09:50:38 2022
+
+@author: monamez
+
+Code from Youtube Video - Normalized Nerd
+"""
+
+import numpy as np
+import sys
+sys.path.append('/Users/monamez/Documents/Python Projects/Python Tutorial/Markov Chains/MarkovChain')
+import MarkovChain as mc
+import networkx as nx
+import matplotlib.pyplot as plt
+
+
+
+
+
+#Create State Names Array using a dictionary
+
+state = {
+    0:"Burger",
+    1:"Pizza",
+    2:"Hot Dog"
+    }
+
+#Define our Transition Matrix
+
+A = np.array([[0.2,0.6,0.2],[0.3,0,0.7],[0.5,0,0.5]])
+G = nx.from_numpy_matrix(np.matrix(A), create_using=nx.DiGraph)
+layout = nx.spring_layout(G)
+rows, cols = np.where(A != 0)
+edges = zip(rows.tolist(), cols.tolist())
+G.add_edges_from(edges)
+nx.draw(G, layout, )
+nx.draw_networkx_edge_labels(G, pos=layout)
+plt.show()
+
+#Random Walk on Markov Chain
+n = 15
+start_state = 0
+print("-----Displaying a Random Walk of ",n," number of steps--------")
+print("state 0 : ",state[start_state], end="\n")
+print("P = ",A[start_state],"\n")
+
+prev_state = start_state
+i= 0
+while n-1:
+    curr_state = np.random.choice([0,1,2],p=A[prev_state])
+    print("state ",i+1,": ", state[curr_state],)
+    print("P = ",A[prev_state],"\n")
+    prev_state = curr_state
+    n -=1
+    i+= 1
+
+#Using Monte Carlo Function
+steps = 10000
+pi = mc.MonteCarlo(A, steps,0)
+print("Monte Carlo yields: ",pi/steps,"\n")
+
+#Using Repeated Matrix Multiplication
+mc.RepeatedMult(A, steps)
